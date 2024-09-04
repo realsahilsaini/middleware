@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Document</title>
+</head>
+<body style="background-color: #3f3f3f;">
+
+  
+  <!-- <input type="number"> -->
+  <div class="p-5 grid grid-cols-1 gap-2 max-w-max mx-auto align-center my-32 bg-sky-950 border-radius-2 rounded-lg ">
+
+  <h1 class="text-5xl font-bold text-slate-400 text-center p-10">
+    CalUI + Backend
+  </h1>
+  
+  <input type="text" id="num1" class="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block mx-auto p-2.5" placeholder="First Number" required />
+  <input type="text" id="num2" class="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block mx-auto p-2.5" placeholder="Second Number" required />
+
+  <div class="grid grid-cols-2 my-2">
+
+    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    onclick="Operation('sum')">Add</button>
+
+    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    onclick="Operation('subtract')">Subtract</button>
+
+    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    onclick="Operation('multiply')">Multiply</button>
+
+    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    onclick="Operation('divide')">Divide</button>
+
+  </div>
+  
+  <p id="answer" class="text-center text-lg text-gray-400 w-50 px-40"></p>
+</div>  
+
+
+
+
+
+
+
+  <script>
+
+    async function sendRequest(endpoint, method, data){
+
+      const response = await fetch(`http://localhost:3000${endpoint}`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      return result;
+
+      }
+  
+
+
+    function Operation(operation){
+      const num1 = parseFloat(document.getElementById('num1').value);
+      const num2 = parseFloat(document.getElementById('num2').value);
+
+
+      sendRequest(`/${operation}`, 'POST', {num1, num2})
+      .then((data) => {
+        document.getElementById('answer').innerText = `Answer: ${data.result}`;
+
+      }).catch((err) => {
+        console.log(err);
+      });
+
+
+    }
+
+
+  </script>
+  
+</body>
+</html>
